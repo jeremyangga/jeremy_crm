@@ -37,6 +37,5 @@ php artisan db:seed
 username: johndoe
 password: password123
 ```
-
 ## ERD
 ![Gambar ERD](./erd_ptsmart.png)
