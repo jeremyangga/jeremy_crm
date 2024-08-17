@@ -79,13 +79,16 @@ class EmployeeController extends Controller
     public function subscribeCustomer(Request $request, $id){
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'isApproved' => 'required|boolean',
-            'isSubscribed' => 'required|boolean',
+            'isApproved' => 'boolean',
+            'isSubscribed' => 'boolean',
             'idProduct' => 'required|exists:products,id',
         ]);
         $customer = Customer::find($id);
+        if (!$customer) {
+            return redirect()->back()->with('error', 'Customer not found!');
+        }
         $customer->update($validatedData);
-        return redirect()->route('customer.mycustomer')->with('success', 'Customer updated successfully!');
+        return redirect('/')->with('success', 'Customer updated successfully!');
     }
 
     public function logout(Request $request)

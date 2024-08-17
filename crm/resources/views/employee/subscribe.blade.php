@@ -65,49 +65,49 @@
             </thead>
             <tbody>
                 @foreach ($customers as $customer)
-                    <tr>
-                        <form action="{{ route('employee.subscribe_customer', $customer->id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                        <td>{{ $customer->id }}</td>
-                        <td>
-                            <input type="text" class="form-control" id="name" name="name" value="{{old('name', $customer->name)}}" required/>
-                        </td>
-                        @if($customer->employee && $customer->employee->isManager)
-                        <td>
-                            <select class="form-control" id="isApproved" name="isApproved">
-                                <option value="0" {{ $customer->isApproved == false ? 'selected' : '' }}>No</option>
-                                <option value="1" {{ $customer->isApproved == true ? 'selected' : '' }}>Yes</option>
-                            </select>
-                        </td>
-                        @else
-                            <td>{{ $customer->isApproved ? 'Yes' : 'No' }}</td>
-                        @endif
-                        <td>
-                            <select class="form-control" id="idProduct" name="idProduct">
-                            @foreach($products as $product)
-                                <option value="{{ $product->id }}" {{ $customer->idProduct == $product->id ? 'selected' : '' }}>
-                                    {{ $product->name }}
-                                </option>
-                                @endforeach
-                            </select>
-                        </td>
-                        <td>
-                            <select class="form-control" id="isSubscribed" name="isSubscribed">
-                                <option value="0" {{ $customer->isSubscribed == false ? 'selected' : '' }}>No</option>
-                                <option value="1" {{ $customer->isSubscribed == true ? 'selected' : '' }}>Yes</option>
-                            </select>
-                        </td>
-                        <td>
-                            <button type="submit" class="btn btn-success">Confirm</button>
-                        </td>
-                        </form>
-                    </tr>
+                    <form action="{{ route('employee.subscribe_customer', $customer->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <tr>
+                            <td>{{ $customer->id }}</td>
+                            <td>
+                                <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $customer->name) }}" required/>
+                            </td>
+                            @if($customer->employee && $customer->employee->isManager)
+                            <td>
+                                <select class="form-control" id="isApproved" name="isApproved">
+                                    <option value="0" {{ $customer->isApproved == false ? 'selected' : '' }}>No</option>
+                                    <option value="1" {{ $customer->isApproved == true ? 'selected' : '' }}>Yes</option>
+                                </select>
+                            </td>
+                            @else
+                                <td>{{ $customer->isApproved ? 'Yes' : 'No' }}</td>
+                            @endif
+                            <td>
+                                <select class="form-control" id="idProduct" name="idProduct">
+                                @foreach($products as $product)
+                                    <option value="{{ $product->id }}" {{ $customer->idProduct == $product->id ? 'selected' : '' }}>
+                                        {{ $product->name }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-control" id="isSubscribed" name="isSubscribed">
+                                    <option value="0" {{ $customer->isSubscribed == false ? 'selected' : '' }}>No</option>
+                                    <option value="1" {{ $customer->isSubscribed == true ? 'selected' : '' }}>Yes</option>
+                                </select>
+                            </td>
+                            <td>
+                                <button type="submit" class="btn btn-success">Confirm</button>
+                            </td>
+                        </tr>
+                    </form>
                 @endforeach
             </tbody>
         </table>
         @else
-        <h1> All your customer is subscribed </h1>
+        <h1>All your customers are subscribed</h1>
         @endif
     </div>
 
