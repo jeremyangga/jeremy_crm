@@ -18,7 +18,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Lead</a>
+                        <a class="nav-link" href="/">My Customer</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/lead">Lead (Customer not yet subscribed list)</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/services">Services</a>

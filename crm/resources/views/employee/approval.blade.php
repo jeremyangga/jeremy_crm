@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product List</title>
+    <title>Approval</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -50,21 +50,30 @@
 
     <!-- Main Content -->
     <div class="container mt-5">
-        <h2>Product List</h2>
+        <h2>Approval Page</h2>
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Product Name</th>
-                    <th>Price</th>
+                    <th>Customer Name</th>
+                    <th>Subscribed</th>
+                    <th>Product</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($products as $product)
+                @foreach ($customers as $customer)
                     <tr>
-                        <td>{{ $product->id }}</td>
-                        <td>{{ $product->name }}</td>
-                        <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
+                        <td>{{ $customer->id }}</td>
+                        <td>{{ $customer->name }}</td>
+                        <td>{{ $customer->isSubscribed ? 'Yes' : 'No' }}</td>
+                        <td>{{ $customer->product ? $customer->product->name : 'No Product Assigned' }}</td>
+                        <td>
+                            <form action="{{ route('employee.approve_customer', $customer->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-success">Approve</button>
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

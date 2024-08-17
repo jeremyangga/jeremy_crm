@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Models\Customer;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -19,13 +21,6 @@ class EmployeeController extends Controller
         return view('employee.login');
     }
 
-    /**
-     * 
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-
      public function login(Request $request)
      {
          $credentials = $request->validate([
@@ -41,12 +36,61 @@ class EmployeeController extends Controller
              'username' => 'Login Failed',
          ])->withInput();
     }
-    /**
-     * Handle the logout request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
+    public function myCustomer(){
+        $employee = Auth::user();
+        $customers = $employee->customers()->with('product')->get();
+        return view('customer.mycustomer', compact('customers'));
+    }
+
+    public function project(){
+        $employee = Auth::user();
+        return view('employee.project', compact('employee'));
+    }
+
+    public function approvalPage(){
+        if(!Auth::user()->isManager) {
+            return redirect('/')->with('error', 'Access Denied');
+        }
+        $customers = Customer::where('isApproved', false)->get();
+        return view('employee.approval', compact('customers'));
+    }
+
+    public function approveCustomer($id){
+        if(!Auth::user()->isManager) {
+            return redirect('/')->with('error', 'Access Denied');
+        }
+
+        $customer = Customer::find($id);
+        if($customer) {
+            $customer->isApproved = true;
+            $customer->save();
+            return redirect('/')->with('success', 'Customer is approved');
+        }
+    }
+
+    public function subscribePage(){
+        $employee = Auth::user();
+        $customers = $employee->customers()->with('product')->where('isSubscribed', false)->get();
+        $products = Product::all();
+        return view('employee.subscribe', compact('customers', 'products'));
+    }
+
+    public function subscribeCustomer(Request $request, $id){
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'isApproved' => 'boolean',
+            'isSubscribed' => 'boolean',
+            'idProduct' => 'required|exists:products,id',
+        ]);
+        $customer = Customer::find($id);
+        if (!$customer) {
+            return redirect()->back()->with('error', 'Customer not found!');
+        }
+        $customer->update($validatedData);
+        return redirect('/')->with('success', 'Customer updated successfully!');
+    }
+
     public function logout(Request $request)
     {
         Auth::logout();

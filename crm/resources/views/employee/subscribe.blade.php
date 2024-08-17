@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product List</title>
+    <title>Subscribe</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -50,25 +50,65 @@
 
     <!-- Main Content -->
     <div class="container mt-5">
-        <h2>Product List</h2>
+        <h2>Subscribe Page</h2>
+        @if(count($customers) != 0)
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Product Name</th>
-                    <th>Price</th>
+                    <th>Customer Name</th>
+                    <th>Approved</th>
+                    <th>Product</th>
+                    <th>Subscribe</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($products as $product)
-                    <tr>
-                        <td>{{ $product->id }}</td>
-                        <td>{{ $product->name }}</td>
-                        <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
-                    </tr>
+                @foreach ($customers as $customer)
+                    <form action="{{ route('employee.subscribe_customer', $customer->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <tr>
+                            <td>{{ $customer->id }}</td>
+                            <td>
+                                <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $customer->name) }}" required/>
+                            </td>
+                            @if($customer->employee && $customer->employee->isManager)
+                            <td>
+                                <select class="form-control" id="isApproved" name="isApproved">
+                                    <option value="0" {{ $customer->isApproved == false ? 'selected' : '' }}>No</option>
+                                    <option value="1" {{ $customer->isApproved == true ? 'selected' : '' }}>Yes</option>
+                                </select>
+                            </td>
+                            @else
+                                <td>{{ $customer->isApproved ? 'Yes' : 'No' }}</td>
+                            @endif
+                            <td>
+                                <select class="form-control" id="idProduct" name="idProduct">
+                                @foreach($products as $product)
+                                    <option value="{{ $product->id }}" {{ $customer->idProduct == $product->id ? 'selected' : '' }}>
+                                        {{ $product->name }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-control" id="isSubscribed" name="isSubscribed">
+                                    <option value="0" {{ $customer->isSubscribed == false ? 'selected' : '' }}>No</option>
+                                    <option value="1" {{ $customer->isSubscribed == true ? 'selected' : '' }}>Yes</option>
+                                </select>
+                            </td>
+                            <td>
+                                <button type="submit" class="btn btn-success">Confirm</button>
+                            </td>
+                        </tr>
+                    </form>
                 @endforeach
             </tbody>
         </table>
+        @else
+        <h1>All your customers are subscribed</h1>
+        @endif
     </div>
 
     <!-- Bootstrap JS and Popper.js -->
