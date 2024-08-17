@@ -3,7 +3,7 @@
 ## Instalasi awal docker, migrasi dan seeding data (menggunakan docker)
 
 ### 1. Membuat container docker dan menjalankannya
-pertama buka terlebih dahulu folder crm dengan mengetikan command ```json cmd crm ``` pada terminal lalu ketikan perintah di bawah ini:
+pertama pastikan docker sudah berjalan lalu buka folder crm dengan mengetikan command ```cd crm``` pada terminal/command prompt lalu ketikan perintah di bawah ini:
 ```json
 docker-compose up --build
 ```
