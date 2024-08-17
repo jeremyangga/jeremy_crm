@@ -20,7 +20,7 @@ docker compose exec app php artisan db:seed
 &nbsp;
 
 ## Migrasi dan seeding data (tidak menggunakan docker)
-
+Untuk database pada postgres diberi nama ```ptsmart```
 ### 1. Migrasi data
 ```json
 php artisan migrate
